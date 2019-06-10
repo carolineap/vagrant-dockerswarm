@@ -1,32 +1,50 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VAGRANTFILE_API_VERSION = "2"
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
 
-vm = {
-  "server" => { :ip => "192.168.33.10", :cpus => 1, :mem => 4096},
-  "client" => { :ip => "192.168.33.11", :cpus => 1, :mem => 2048}
-}
- 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
-  config.vm.box = "ubuntu/bionic64"
+Vagrant.configure(2) do |config|
   
-  vm.each_with_index do |(hostname, info), index|
+  config.vm.define "server" do |server|
 
-    config.vm.define hostname do |cfg|
-  
-      cfg.vm.provider :virtualbox do |vb, override|
+    server.vm.box = "ubuntu/bionic64"
+    server.vm.network "forwarded_port", guest: 9000, host: 9001
+    #server.vm.network "public_network", bridge: "ens3"
+    server.vm.network "private_network", ip: "192.168.33.10"
+    server.vm.hostname = "server"
 
-        override.vm.network :private_network, ip: "#{info[:ip]}"
-        override.vm.hostname = hostname
-        vb.name = hostname
-        vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on"]
-  
-      end # end provider
-  
-    end # end define
+    server.vm.provider "virtualbox" do |vb|
+            vb.memory = "4096"
+            vb.name = "server"
+    end
 
-  end # end vm
+    server.vm.provision "shell" do |s|
+        s.inline = "sudo apt update"
+        s.inline = "sudo apt -y upgrade"
+    end
 
-end # end config
+  end
+
+  config.vm.define "client" do |client|
+
+    client.vm.box = "ubuntu/bionic64"
+    #client.vm.network "public_network"
+    client.vm.network "private_network", ip: "192.168.33.11"
+    client.vm.hostname = "client"
+
+    client.vm.provider "virtualbox" do |vb|
+            vb.memory = "2048"
+            vb.name = "client"
+    end
+    
+    client.vm.provision "shell" do |s|
+        s.inline = "sudo apt update"
+        s.inline = "sudo apt -y upgrade"
+    end
+
+  end
+
+end
