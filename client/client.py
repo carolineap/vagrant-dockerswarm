@@ -8,6 +8,7 @@ content = { 'time':'10:20',
             'Mem':'2048'}
 
 def run():
+    
     while(1):
 
         print('''
@@ -18,12 +19,12 @@ def run():
         option = input("Digite a opcao: ")
 
         if(option == '1'):
-            r = requests.post('http://localhost:8080', json=content)
+            r = requests.post('http://http://192.168.33.10:5001', json=content)
             print(r.status_code)
             print(r.content)
 
         elif(option == '2'):
-            response = requests.get('http://localhost:8080')
+            response = requests.get('http://192.168.33.10:5001')
             print(response.status_code)
             print(response.content)
 
@@ -31,5 +32,4 @@ def run():
             exit()
 
 if __name__ == "__main__":
-
     run()

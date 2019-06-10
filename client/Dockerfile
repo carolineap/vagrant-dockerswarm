@@ -1,8 +1,8 @@
-FROM alpine
-RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
+FROM python:3 
 COPY . /app
-WORKDIR /app
+WORKDIR /app 
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python"]
-CMD ["client.py"]
+EXPOSE 80
+ENV NAME World
+CMD ["python", "client.py"]
+
