@@ -15,17 +15,17 @@ $ cd tp1/
 ```
 No primeiro terminal:
 ```bash
-$vagrant ssh server
+$ vagrant ssh server
 ```
 No segundo terminal:
 ```bash
-$vagrant ssh client
+$ vagrant ssh client
 ```
 No terceiro terminal:
 ```bash
-$sudo python3 get_info.py
+$ sudo python3 get_info.py
 ```
 No terminal do client, execute:
 ```bash
-$sudo docker run -ti client_app
+$ sudo docker run -ti client_app
 ```
